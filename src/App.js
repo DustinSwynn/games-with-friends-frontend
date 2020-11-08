@@ -1,3 +1,4 @@
+import { useContext, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Masthead from "./components/Masthead";
@@ -12,11 +13,17 @@ import {
   Switch 
 } from 'react-router-dom';
 import { ROOT_PATHS } from './utils/constants';
+import { postLogin } from './clientAPIs/login';
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
-  console.log("isAuthenticated?", isAuthenticated);
-  console.log("USER", user);
+
+  // Code within useEffect will run after the user is redirected after login is complete
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      postLogin(user.name, user.nickname, user.email, user.sub)
+    }
+  }, [isLoading]);
 
   return (
     <div className="App">

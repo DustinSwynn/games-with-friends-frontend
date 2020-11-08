@@ -20,7 +20,7 @@ const Codenames = () => {
     console.log("Submit button clicked!");
     // API function that will send hint to back end server
     postHint(hint, number);
-  }
+  };
 
   return (
     <div>

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const postLogin = ( name, nickname, email, id ) => {
-  console.log(`name ${name}, nickname ${nickname}, email ${email}, id ${id}`);
 
   let body = {
     name: name,
@@ -18,8 +17,7 @@ export const postLogin = ( name, nickname, email, id ) => {
 
   return p
     .then(res => {
-      console.log("Posted login to to the backend!");
-      console.log("RESPONSE", res);
+      console.log("Login Response:", res);
       return res;
     })
     .catch(err => {

@@ -167,6 +167,7 @@ const Codenames = () => {
 
   const handleOnSubmit = (subType) => {
     console.log("Submit button clicked!");
+    // API function that will send hint to back end server
     ajaxSend(subType);
   }
 

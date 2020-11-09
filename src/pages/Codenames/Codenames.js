@@ -4,7 +4,6 @@ import { InputLabel, Input, Button } from '@material-ui/core';
 
 const Codenames = () => {
 
-
   /*
     Was originally in input_scripts.js
   */
@@ -129,6 +128,10 @@ const Codenames = () => {
 
     console.log(queryStr);
 
+    document.getElementById("hintWord").value = '';
+    document.getElementById("hintNum").value = '';
+    document.getElementById("guessWord").value = '';
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if( this.readyState === 4 && this.status === 200 ) {
@@ -140,6 +143,7 @@ const Codenames = () => {
     xhttp.send();
 
   }
+
 
   /*
     Actual JSX stuff
@@ -166,14 +170,29 @@ const Codenames = () => {
   }
 
   const handleOnSubmit = (subType) => {
-    console.log("Submit button clicked!");
-    // API function that will send hint to back end server
+    
+    switch(subType) {
+      case 0:
+        console.log("New Game button clicked");
+        break;
+      case 1:
+        console.log("Submit Hint button was clicked");
+        break;
+      case 2:
+        console.log("Submit Guess buttin was clicked");
+        break;
+      case 4:
+        console.log("End Turn button was clicked");
+        break;
+      default:
+        console.log("Unexpected value" + subType + "was provided");
+    }
+
     ajaxSend(subType);
   }
 
   // Start updating
   setInterval(ajaxUpdate, 1000);
-
 
   return (
     <body>
@@ -238,10 +257,10 @@ const Codenames = () => {
       <br /><br /><br /><br />
 
       <InputLabel>Hint Word:
-        <Input type="text" onChange={event => handleOnChangeHint(event.target.value)} />
+        <Input type="text" id="hintWord" onChange={event => handleOnChangeHint(event.target.value)} />
       </InputLabel>
       <InputLabel>Hint Number:
-        <Input type="number" onChange={event => handleOnChangeNumber(event.target.value)} />
+        <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
       </InputLabel>
       <br />
       <Button variant="contained" onClick={() => handleOnSubmit(1)}>
@@ -251,7 +270,7 @@ const Codenames = () => {
       <br /><br /><br /><br />
 
       <InputLabel>Guess Word:
-        <Input type="text" onChange={event => handleOnChangeGuess(event.target.value)} />
+        <Input type="text" id="guessWord" onChange={event => handleOnChangeGuess(event.target.value)} />
       </InputLabel>
       <br />
       <Button variant="contained" onClick={() => handleOnSubmit(2)}>
@@ -263,6 +282,9 @@ const Codenames = () => {
       <Button variant="contained" onClick={() => handleOnSubmit(3)}>
         End Turn
       </Button>
+
+      <br /><br /><br /><br />
+      <p id="game">Game ID:</p>
     </body>
   );
 };

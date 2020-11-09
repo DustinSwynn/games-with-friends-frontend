@@ -33,7 +33,8 @@ const useStyles = () => ({
   }),
   game: {
     position: "absolute",
-    bottom: 0,
+    bottom: "20px",
+    width: "200px",
     left: "50%",
     transform: "translateX(-50%)"
   },
@@ -64,7 +65,8 @@ const GameSelector = () => {
       {/* <Back css={styles.arrowBack}/> */}
       <NavLink to="/codenames">
         <div css={styles.gameContainer}>
-          <h3 css={styles.game}>Codenames</h3>
+          {/* <h3 css={styles.game}>Codenames</h3> */}
+          <img src="/codenames-logo.png" css={styles.game}/>
         </div>
       </NavLink>
       {/* <Next css={styles.arrowNext}/> */}

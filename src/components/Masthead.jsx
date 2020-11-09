@@ -3,6 +3,7 @@
 import { css, jsx } from '@emotion/core';
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 import { ReactComponent as Logo } from '../assets/board-game.svg';
 import LoginButton from '../auth/LoginButton';
@@ -34,8 +35,21 @@ const useStyles = () => ({
   authButton: css({
     float: "right",
     position: "absolute",
+    display: "inline-block",
     right: "20px",
     paddingTop: "6px"
+  }),
+  navBar: css({
+    listStyleType: "none",
+    margin: 0,
+    padding: 0,
+    display: "inline-flex",
+    float: "right",
+    right: "150px",
+    position: "absolute"
+  }),
+  navItems: css({
+    padding: "18px 0px 18px 10px"
   })
 });
 
@@ -50,6 +64,10 @@ const Masthead = () => {
           <Logo css={styles.logo} />
           <h1 css={styles.name}>Games with Friends</h1>
         </div>
+        <ul css={styles.navBar}>
+          <li css={styles.navItems}><NavLink to="/">Home</NavLink></li>
+          <li css={styles.navItems}><a>Leaderboard</a></li>
+        </ul>
         <div css={styles.authButton}>
           {isAuthenticated
             ? <LogoutButton />

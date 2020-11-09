@@ -41,9 +41,9 @@ function App() {
 
   return (
     <div className="App">
-      <Masthead />
-      <Navbar />
       <Router>
+        <Masthead />
+        <Navbar />
         <div css={styles.wrapper}>
           <Switch>
             <Route exact path={ROOT_PATHS.INDEX}>

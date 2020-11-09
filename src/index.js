@@ -4,16 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from "@auth0/auth0-react";
+import { Provider } from './context/GlobalContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Auth0Provider
-      domain="dev-qs420fgk.us.auth0.com"
-      clientId="kmyM6xJpYT0k58ZUEjFSCQvdxeX70tg2"
-      redirectUri={window.location.origin}
-    >
-      <App />
-    </Auth0Provider>
+    <Provider>
+      <Auth0Provider
+        domain="dev-qs420fgk.us.auth0.com"
+        clientId="kmyM6xJpYT0k58ZUEjFSCQvdxeX70tg2"
+        redirectUri={window.location.origin}
+      >
+        <App />
+      </Auth0Provider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

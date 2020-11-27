@@ -35,7 +35,7 @@ function App() {
   // Code within useEffect will run after the user is redirected after login is complete
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      postLogin(user.name, user.nickname, user.email, user.sub)
+      postLogin(user.name, user.nickname, user.email, user.sub);
     }
   }, [isLoading]);
 

@@ -21,7 +21,6 @@ const LoginButton = () => {
 
   return (
     <Button 
-      variant="contained"
       color="primary"
       onClick={() => handleOnClick()}
     >

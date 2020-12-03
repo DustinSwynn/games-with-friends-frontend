@@ -4,6 +4,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 const baseGameServerAddress = 'localhost:8080/codenames'; // "http://backend-dot-second-folio-294223.nn.r.appspot.com"
 
 var gameId = '';
+var playerId = '';
+var playerName = '';
 var playerTeam = '';
 var playerRole = '';
 
@@ -40,11 +42,15 @@ export const setGameId = (id) => {
   gameId = id;
   console.log("Set gameId to [" + id + "]");
 
+  postUpdate();
+
 }
 
 // Same as above
-export const setTeamRole = (team, role) => {
+export const setUser = (userid, username, team, role) => {
 
+  playerId = userid;
+  playerName = username;
   playerTeam = team;
   playerRole = role;
   console.log("User joined team [" + team + "] as a(n) [" + role + "]")
@@ -54,10 +60,8 @@ export const setTeamRole = (team, role) => {
 // Handles actually posting messages
 export const postMessage = (body) => {
 
-  const { user } = useAuth0();
-
-  body.userid = user.sub;
-  body.username = user.nickname;
+  body.userid = playerId;
+  body.username = playerName;
   body.team = playerTeam;
   body.role = playerRole;
 
@@ -69,8 +73,8 @@ export const postMessage = (body) => {
 
   return p
     .then(res => {
-      console.log("postHint returned successfully");
-      return res;
+      console.log("postMessage returned successfully");
+      return res.data;
     })
     .catch(err => {
       console.log("Error: postMessage failed while sending a [" + body.action + "] with error:", err);
@@ -79,7 +83,7 @@ export const postMessage = (body) => {
 }
 
 // Ask the server for an update
-export const postUpdate = () {
+export const postUpdate = () => {
 
   console.log("Posting an update request");
 
@@ -122,7 +126,7 @@ export const postHint = (hint, number) => {
 // Send a guess to the server
 export const postGuess = (guess) => {
 
-  console.log("Posting guess: [" + hint + "]");
+  console.log("Posting guess: [" + guess + "]");
 
   var body = {
     action: 'guess',

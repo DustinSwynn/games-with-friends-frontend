@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { InputLabel, Input, Button } from '@material-ui/core';
-//import { postHint } from '../../clientAPIs/codenames';
+import { setGameId, setUser, postUpdate, postStart, postHint, postGuess, postEnd } from '../../clientAPIs/codenames';
+
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Codenames = () => {
+
+  const { user } = useAuth0();
 
   /*
     Was originally in input_scripts.js
@@ -87,63 +91,6 @@ const Codenames = () => {
 
   }
 
-  // Uses ajax to ask the server for the current game state, and then updating the page
-  function ajaxUpdate() {
-
-    // https://www.w3schools.com/whatis/whatis_ajax.asp
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if( this.readyState === 4 && this.status === 200 ) {
-        updateScreen(JSON.parse(this.responseText));
-      }
-    };
-    xhttp.open('GET', baseURL + "/update", true);
-    xhttp.send();
-
-  }
-
-  // Sends the GET requests with ajax instead of reloading the page
-  function ajaxSend(inputType) {
-
-    var queryStr = '';
-
-    switch(inputType) {
-
-      case 0:  // Start a new game
-        queryStr = 'start=start';
-        break;
-      case 1:  // Give a hint
-        queryStr = "hintWord=" + hint + "&hintNum=" + number;
-        break;
-      case 2:  // Make a guess
-        queryStr = "guessWord=" + guess;
-        break;
-      case 3:  // End the turn
-        queryStr = "endTurn=1";
-        break;
-      default:
-        alert("Invalid input");
-        return;
-    }
-
-    console.log(queryStr);
-
-    document.getElementById("hintWord").value = '';
-    document.getElementById("hintNum").value = '';
-    document.getElementById("guessWord").value = '';
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if( this.readyState === 4 && this.status === 200 ) {
-        updateScreen(JSON.parse(this.responseText));
-      }
-    };
-    xhttp.open('GET', baseURL + "/update?" + queryStr, true);
-    xhttp.setRequestHeader('Access-Control-Reques-Headers', '*');
-    xhttp.send();
-
-  }
-
 
   /*
     Actual JSX stuff
@@ -153,6 +100,9 @@ const Codenames = () => {
   const [hint, setHint] = useState("");
   const [number, setNumber] = useState(0);
   const [guess, setGuess] = useState("");
+  const [playerTeam, setTeam] = useState("");
+  const [playerRole, setRole] = useState("");
+  const [gameId, setGameId] = useState("");
 
   const handleOnChangeHint = (hint) => {
     setHint(hint);
@@ -169,123 +119,144 @@ const Codenames = () => {
     console.log("Guess", guess);
   }
 
-  const handleOnSubmit = (subType) => {
-    
-    switch(subType) {
-      case 0:
-        console.log("New Game button clicked");
-        break;
-      case 1:
-        console.log("Submit Hint button was clicked");
-        break;
-      case 2:
-        console.log("Submit Guess buttin was clicked");
-        break;
-      case 4:
-        console.log("End Turn button was clicked");
-        break;
-      default:
-        console.log("Unexpected value" + subType + "was provided");
-    }
+  const handleOnChangeTeam = (team) => {
+    setTeam(team);
+    console.log("Team", team);
+  }
 
-    ajaxSend(subType);
+  const handleOnChangeRole = (role) => {
+    setRole(role);
+    console.log("Role", role);
+  }
+
+  const handleOnChangeGameId = (id) => {
+    setGameId(id);
+    console.log("Game ID:", id);
   }
 
   // Start updating
-  setInterval(ajaxUpdate, 1000);
+  // setInterval(ajaxUpdate, 1000);
+  // console.log(user.sub);
 
   return (
-    <body>
+    <div>
+
       <table id='grid'>
-        <tbody>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-        </tbody>
-      </table>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+		</table>
 
-      <br/>
+		<br />
 
-      <table id='map'>
-        <tbody>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td>
-          </tr>
-        </tbody>
-      </table>
+		<table id='map'>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+		</table>
 
-      <br/>
+		<br />
+		<h1 id="winner"></h1>
+		<h1 id="team"></h1>
+		<h2 id="blueLeft"></h2>
+		<h2 id="redLeft"></h2>
+		<p id="phase"></p>
+		<p id="hint"></p>
+		<p id="guessesLeft"></p>
 
-      <h1 id="winner">temp</h1>
-      <h1 id="team">temp</h1>
-      <h2 id="blueLeft">temp</h2>
-      <h2 id="redLeft">temp</h2>
-      <p id="phase">temp</p>
-      <p id="hint">temp</p>
-      <p id="guessesLeft">temp</p>
+    <Button variant="contained" onclick={() =>}>
+      Start Updates
+    </Button>
 
-      <br /><br />
+    <Button variant="contained" onclick={() =>}>
+      Stop Updates
+    </Button>
 
-      <Button variant="contained" onClick={() => handleOnSubmit(0)}>
-        Start a New Game
-      </Button>
+    <InputLabel>Team:
+      <Input type="text" id="formTeam" onChange={event => handleOnChangeTeam(event.target.value)} />
+    </InputLabel>
+    <InputLabel>Role:
+      <Input type="text" id="formRole" onChange={event => handleOnChangeRole(event.target.value)} />
+    </InputLabel>
+    <Button variant="contained" onClick={() => setUser(user.sub, user.nickname, playerTeam, playerRole)}>
+      Set Team and Role
+    </Button>
 
-      <br /><br /><br /><br />
+		<Button variant="contained" onClick={() => postStart()}>
+      Start a New Game
+    </Button>
 
-      <InputLabel>Hint Word:
-        <Input type="text" id="hintWord" onChange={event => handleOnChangeHint(event.target.value)} />
-      </InputLabel>
-      <InputLabel>Hint Number:
-        <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
-      </InputLabel>
-      <br />
-      <Button variant="contained" onClick={() => handleOnSubmit(1)}>
-        Submit Hint
-      </Button>
+    <br /><br /><br /><br />
 
-      <br /><br /><br /><br />
+    <InputLabel>Game ID:
+      <Input type="text" id="joinId" onChange={event => handleOnChangeGameId(event.target.value)} />
+    </InputLabel>
+    <Button variant="contained" onClick={() => setGameId(gameId)}>
+      Set Game ID
+    </Button>
 
-      <InputLabel>Guess Word:
-        <Input type="text" id="guessWord" onChange={event => handleOnChangeGuess(event.target.value)} />
-      </InputLabel>
-      <br />
-      <Button variant="contained" onClick={() => handleOnSubmit(2)}>
-        Submit Guess
-      </Button>
+    <br /><br /><br /><br />
 
-      <br /><br /><br /><br />
+		<InputLabel>Hint Word:
+      <Input type="text" id="hintWord" onChange={event => handleOnChangeHint(event.target.value)} />
+    </InputLabel>
+    <InputLabel>Hint Number:
+      <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
+    </InputLabel>
+    <br />
+    <Button variant="contained" onClick={() => postHint(hint, number)}>
+      Submit Hint
+    </Button>
 
-      <Button variant="contained" onClick={() => handleOnSubmit(3)}>
-        End Turn
-      </Button>
+    <br /><br /><br /><br />
 
-      <br /><br /><br /><br />
-      <p id="game">Game ID:</p>
-    </body>
+		<InputLabel>Guess Word:
+      <Input type="text" id="guessWord" onChange={event => handleOnChangeGuess(event.target.value)} />
+    </InputLabel>
+    <br />
+    <Button variant="contained" onClick={() => postGuess(guess)}>
+      Submit Guess
+    </Button>
+
+    <br /><br /><br /><br />
+
+		<Button variant="contained" onClick={() => postEnd()}>
+      End Turn
+    </Button>
+
+    <br /><br /><br /><br />
+
+		<p id="game"></p>
+		<p id="username"></p>
+		<p id="userid"></p>
+		<p id="playerTeam"></p>
+		<p id="playerRole"></p>
+
+    </div>
   );
 };
 

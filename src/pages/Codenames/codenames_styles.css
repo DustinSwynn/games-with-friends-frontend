@@ -1,5 +1,21 @@
-body { 
+body {
 	background-color: gray;
+}
+
+h1 {
+	margin: 0px 0px;
+}
+
+h2 {
+	margin: 0px 0px;
+}
+
+p {
+	margin: 0px 0px;
+}
+
+table {
+	width: 50%;
 }
 
 td {
@@ -12,4 +28,13 @@ table#grid td {
 
 table#map td {
 	background-color: lightblue;
+}
+
+td {
+	
+	border: solid 1px black;
+	width: 75px;
+	height: 50px;
+	text-align: center;
+
 }

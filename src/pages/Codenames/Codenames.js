@@ -14,8 +14,6 @@ const Codenames = () => {
 
   const baseURL = "http://localhost:8080/codenames";
 
-  var gameId = '';
-
   // Updates the page with the info pulled from the server
   // GameData should be what is returned from updateURL, parsed with JSON.parse()
   function updateScreen( gameData ) {
@@ -142,41 +140,45 @@ const Codenames = () => {
     <div>
 
       <table id='grid'>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
+        <tbody>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+      </tbody>
 		</table>
 
 		<br />
 
 		<table id='map'>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
-			<tr>
-				<td></td><td></td><td></td><td></td><td></td>
-			</tr>
+      <tbody>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+      </tbody>
 		</table>
 
 		<br />
@@ -188,13 +190,13 @@ const Codenames = () => {
 		<p id="hint"></p>
 		<p id="guessesLeft"></p>
 
-    <Button variant="contained" onclick={() =>}>
+    {/* <Button variant="contained" onclick={() =>}>
       Start Updates
     </Button>
 
     <Button variant="contained" onclick={() =>}>
       Stop Updates
-    </Button>
+    </Button> */}
 
     <InputLabel>Team:
       <Input type="text" id="formTeam" onChange={event => handleOnChangeTeam(event.target.value)} />
@@ -202,9 +204,12 @@ const Codenames = () => {
     <InputLabel>Role:
       <Input type="text" id="formRole" onChange={event => handleOnChangeRole(event.target.value)} />
     </InputLabel>
+    <br />
     <Button variant="contained" onClick={() => setUser(user.sub, user.nickname, playerTeam, playerRole)}>
       Set Team and Role
     </Button>
+
+    <br /><br /><br /><br />
 
 		<Button variant="contained" onClick={() => postStart()}>
       Start a New Game
@@ -215,6 +220,7 @@ const Codenames = () => {
     <InputLabel>Game ID:
       <Input type="text" id="joinId" onChange={event => handleOnChangeGameId(event.target.value)} />
     </InputLabel>
+    <br />
     <Button variant="contained" onClick={() => setGameId(gameId)}>
       Set Game ID
     </Button>

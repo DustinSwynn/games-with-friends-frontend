@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useAuth0 } from '@auth0/auth0-react';
 
-const baseGameServerAddress = 'localhost:8080/codenames'; // "http://backend-dot-second-folio-294223.nn.r.appspot.com"
+const baseGameServerAddress = 'http://localhost:8080/codenames'; // "http://backend-dot-second-folio-294223.nn.r.appspot.com"
 
 var gameId = '';
 var playerId = '';
@@ -74,6 +73,7 @@ export const postMessage = (body) => {
   return p
     .then(res => {
       console.log("postMessage returned successfully");
+      console.log(res);
       return res.data;
     })
     .catch(err => {

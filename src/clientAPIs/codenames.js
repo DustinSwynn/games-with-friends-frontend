@@ -64,6 +64,8 @@ export const postMessage = (body) => {
   body.team = playerTeam;
   body.role = playerRole;
 
+  console.log("gameId:", gameId)
+
   let p = axios.post(baseGameServerAddress + "/game/" + gameId, body, {
     header: {
       "Content-Type": "application/json"
@@ -74,6 +76,7 @@ export const postMessage = (body) => {
     .then(res => {
       console.log("postMessage returned successfully");
       console.log(res);
+      gameId = res.data.gameId;
       return res.data;
     })
     .catch(err => {

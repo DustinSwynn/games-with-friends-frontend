@@ -7,33 +7,7 @@ var playerId = '';
 var playerName = '';
 var playerTeam = '';
 var playerRole = '';
-
-/*
-export const postHint = (hint, number) => {
-  console.log("Posting Hint:", hint);
-
-  let body = {
-    hint: hint,
-    number: number
-  };
-
-  let p = axios.post("/api/codenames", body, {
-    headers: {
-      "Content-Type": "application/json",
-    }
-  });
-
-  return p
-    .then(res => {
-      console.log("Posted hint to to the backend!");
-      console.log("RESPONSE", res);
-      return res;
-    })
-    .catch(err => {
-      console.log("Error", err);
-    });
-}
-*/
+var intervalVar;
 
 // Not sure if this is needed, but I need some way to see the gameId
 export const setGameId = (id) => {

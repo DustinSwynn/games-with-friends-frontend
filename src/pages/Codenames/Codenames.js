@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { InputLabel, Input, Button } from '@material-ui/core';
 import { setGameId, setUser, postUpdate, postStart, postHint, postGuess, postEnd } from '../../clientAPIs/codenames';
+import Card from './Card';
 
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -8,11 +9,19 @@ const Codenames = () => {
 
   const { user } = useAuth0();
 
+  // enums don't exist in JavaScript and this is the next best thing according to StackOverflow...
+  // https://stackoverflow.com/questions/287903/what-is-the-preferred-syntax-for-defining-enums-in-javascript
+  const actions = {
+    START: 'start',
+    HINT: 'hint',
+    GUESS: 'guess',
+    END: 'end',
+    UPDATE: 'update'
+  }
+
   /*
     Was originally in input_scripts.js
   */
-
-  const baseURL = "http://localhost:8080/codenames";
 
   // Updates the page with the info pulled from the server
   // GameData should be what is returned from updateURL, parsed with JSON.parse()
@@ -115,71 +124,48 @@ const Codenames = () => {
   const handleOnChangeGuess = (guess) => {
     setGuess(guess);
     console.log("Guess", guess);
-  }
+  };
 
   const handleOnChangeTeam = (team) => {
     setTeam(team);
     console.log("Team", team);
-  }
+  };
 
   const handleOnChangeRole = (role) => {
     setRole(role);
     console.log("Role", role);
-  }
+  };
 
   const handleOnChangeGameId = (id) => {
     setGameId(id);
     console.log("Game ID:", id);
-  }
+  };
 
-  // Start updating
-  // setInterval(ajaxUpdate, 1000);
-  // console.log(user.sub);
+  const handleOnSubmit = (subAction) => {
+
+    switch(subAction) {
+
+      case actions.START:
+        // Do something
+        break;
+      case actions.HINT:
+        // Do something
+        break;
+      case actions.GUESS:
+        // Do something
+        break;
+      case actions.END:
+        // Do something
+        break;
+      case actions.UPDATE:
+        // Do something
+
+    }
+
+  }
 
   return (
     <div>
-
-      <table id='grid'>
-        <tbody>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-      </tbody>
-		</table>
-
-		<br />
-
-		<table id='map'>
-      <tbody>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-      </tbody>
-		</table>
 
 		<br />
 		<h1 id="winner"></h1>
@@ -197,6 +183,8 @@ const Codenames = () => {
     <Button variant="contained" onclick={() =>}>
       Stop Updates
     </Button> */}
+
+    <Card word="hi" color="Red" onClick={() => postGuess()} />
 
     <InputLabel>Team:
       <Input type="text" id="formTeam" onChange={event => handleOnChangeTeam(event.target.value)} />

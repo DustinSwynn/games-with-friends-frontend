@@ -7,10 +7,9 @@ var playerId = '';
 var playerName = '';
 var playerTeam = '';
 var playerRole = '';
-var intervalVar;
 
 // Not sure if this is needed, but I need some way to see the gameId
-export const setGameId = (id) => {
+export const setGameid = (id) => {
 
   gameId = id;
   console.log("Set gameId to [" + id + "]");

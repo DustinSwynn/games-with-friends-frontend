@@ -14,18 +14,18 @@ const useStyles = () => ({
 	})
 });
 
-const Board = ({cards, handleClick}) => {
+const AgentMap = ({cards}) => {
 
 	const styles = useStyles();
 
 	return (
 		<div css={styles.wrapper} >
 			{cards.map((card, i) => (
-				<Card key={i} word={card.word} color={card.colour === 'None' ? 'WhiteSmoke' : card.colour} onClick={() => handleClick(card.word)} />
+				<Card key={i} word={card.type} color={card.colour === 'None' ? 'WhiteSmoke' : card.colour} onClick={() => null} />
 			))}
 		</div>
 	)
 
 }
 
-export default Board;
+export default AgentMap;

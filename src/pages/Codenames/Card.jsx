@@ -6,7 +6,8 @@ const useStyles = (color) => ({
 	wrapper: css({
 		width: '100px',
 		height: '50px',
-		backgroundColor: `${color}`
+		backgroundColor: `${color}`,
+		borderRadius: '5px'
 	})
 });
 
@@ -16,7 +17,7 @@ const Card = ({word, color, onClick}) => {
 
 	return (
 		<div>
-			<button css={styles.wrapper} onClick={() => onClick(word)}>{word}</button>
+			<button css={styles.wrapper} onClick={() => onClick()}>{word}</button>
 		</div>
 	)
 	

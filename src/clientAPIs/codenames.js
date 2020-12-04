@@ -49,7 +49,6 @@ export const postMessage = (body) => {
   return p
     .then(res => {
       console.log("postMessage returned successfully");
-      console.log(res);
       gameId = res.data.gameId;
       return res.data;
     })

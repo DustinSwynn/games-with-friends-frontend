@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InputLabel, Input, Button } from '@material-ui/core';
+import { InputLabel, Input, Button, ownerDocument } from '@material-ui/core';
 import { setGameId, setUser, postUpdate, postStart, postHint, postGuess, postEnd } from '../../clientAPIs/codenames';
 import Card from './Card';
 
@@ -8,6 +8,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 const Codenames = () => {
 
   const { user } = useAuth0();
+
+  var intervalVar;
 
   // enums don't exist in JavaScript and this is the next best thing according to StackOverflow...
   // https://stackoverflow.com/questions/287903/what-is-the-preferred-syntax-for-defining-enums-in-javascript
@@ -104,8 +106,10 @@ const Codenames = () => {
   */
 
 
+  // Input state variables
+
   const [hint, setHint] = useState("");
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState(1);
   const [guess, setGuess] = useState("");
   const [playerTeam, setTeam] = useState("");
   const [playerRole, setRole] = useState("");
@@ -143,25 +147,58 @@ const Codenames = () => {
 
   const handleOnSubmit = (subAction) => {
 
+    var gameRes = null;
+
     switch(subAction) {
 
       case actions.START:
-        // Do something
+        gameRes = postStart();
         break;
       case actions.HINT:
-        // Do something
+        gameRes = postHint(hint, number);
         break;
       case actions.GUESS:
-        // Do something
+        gameRes = postGuess(guess);
         break;
       case actions.END:
-        // Do something
+        gameRes = postEnd();
         break;
       case actions.UPDATE:
-        // Do something
+        gameRes = postUpdate();
+        break;
+      default:
+        console.log("Error: Unexpected subAction [" + subAction + "] received in handleOnSubmit!");
+        return;
 
     }
 
+    document.getElementById('inputTeam').value = '';
+    document.getElementById('inputRole').value = '';
+    document.getElementById('hintWord').value = '';
+    handleOnChangeHint('');
+    document.getElementById('hintNum').value = 1;
+    handleOnChangeNumber(1);
+    document.getElementById('guessWord').value = '';
+    handleOnChangeGuess('');
+
+    // Jess please help I have no idea what is going on anymore
+    gameRes
+      .then( data => {
+        console.log(data);
+
+
+
+      })
+
+  }
+
+  function startUpdating() {
+    stopUpdating();
+    intervalVar = setInterval(handleOnSubmit(actions.UPDATE), 1000);
+  }
+
+  function stopUpdating() {
+    clearInterval(intervalVar);
   }
 
   return (
@@ -176,21 +213,25 @@ const Codenames = () => {
 		<p id="hint"></p>
 		<p id="guessesLeft"></p>
 
-    {/* <Button variant="contained" onclick={() =>}>
+    <Card word="hi" color="Red" onClick={() => postGuess()} />
+
+    <br /><br /><br /><br />
+
+    <Button variant="contained" onclick={() =>startUpdating()}>
       Start Updates
     </Button>
 
-    <Button variant="contained" onclick={() =>}>
+    <Button variant="contained" onclick={() =>stopUpdating()}>
       Stop Updates
-    </Button> */}
+    </Button>
 
-    <Card word="hi" color="Red" onClick={() => postGuess()} />
+    <br /><br /><br /><br />
 
     <InputLabel>Team:
-      <Input type="text" id="formTeam" onChange={event => handleOnChangeTeam(event.target.value)} />
+      <Input type="text" id="inputTeam" onChange={event => handleOnChangeTeam(event.target.value)} />
     </InputLabel>
     <InputLabel>Role:
-      <Input type="text" id="formRole" onChange={event => handleOnChangeRole(event.target.value)} />
+      <Input type="text" id="inputRole" onChange={event => handleOnChangeRole(event.target.value)} />
     </InputLabel>
     <br />
     <Button variant="contained" onClick={() => setUser(user.sub, user.nickname, playerTeam, playerRole)}>
@@ -199,7 +240,7 @@ const Codenames = () => {
 
     <br /><br /><br /><br />
 
-		<Button variant="contained" onClick={() => postStart()}>
+		<Button variant="contained" onClick={() => handleOnSubmit(actions.START)}>
       Start a New Game
     </Button>
 
@@ -222,7 +263,7 @@ const Codenames = () => {
       <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
     </InputLabel>
     <br />
-    <Button variant="contained" onClick={() => postHint(hint, number)}>
+    <Button variant="contained" onClick={() => handleOnSubmit(actions.HINT)}>
       Submit Hint
     </Button>
 
@@ -232,13 +273,13 @@ const Codenames = () => {
       <Input type="text" id="guessWord" onChange={event => handleOnChangeGuess(event.target.value)} />
     </InputLabel>
     <br />
-    <Button variant="contained" onClick={() => postGuess(guess)}>
+    <Button variant="contained" onClick={() => handleOnSubmit(actions.GUESS)}>
       Submit Guess
     </Button>
 
     <br /><br /><br /><br />
 
-		<Button variant="contained" onClick={() => postEnd()}>
+		<Button variant="contained" onClick={() => handleOnSubmit(actions.END)}>
       End Turn
     </Button>
 

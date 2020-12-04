@@ -13,7 +13,7 @@ import {
 } from 'react-router-dom';
 
 import { ROOT_PATHS } from './utils/constants';
-import { postLogin } from './clientAPIs/login';
+import { postLogin } from './clientAPIs/profile';
 import Masthead from './components/Masthead';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage/LandingPage';

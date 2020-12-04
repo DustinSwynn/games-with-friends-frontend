@@ -17,6 +17,7 @@ import { postLogin } from './clientAPIs/login';
 import Masthead from './components/Masthead';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage/LandingPage';
+import Chat from './components/Chat';
 
 const useStyles = () => ({
   wrapper: css({
@@ -43,6 +44,7 @@ function App() {
     <div className="App">
       <Masthead />
       <Navbar />
+      <Chat />
       <Router>
         <div css={styles.wrapper}>
           <Switch>

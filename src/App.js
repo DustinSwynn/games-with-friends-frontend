@@ -19,7 +19,7 @@ import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Profile from './pages/Profile/Profile';
 import ProfileMenu from './components/ProfileMenu';
-import BattleShip from './pages/Battleship/Battleship';
+// import BattleShip from './pages/Battleship/Battleship';
 
 const useStyles = () => ({
   wrapper: css({
@@ -55,9 +55,9 @@ function App() {
             <Route path={ROOT_PATHS.CODENAMES}>
               <Codenames />
             </Route>
-            <Route path={ROOT_PATHS.BATTLESHIP}>
+            {/* <Route path={ROOT_PATHS.BATTLESHIP}>
               <BattleShip />
-            </Route>
+            </Route> */}
             <Route path={ROOT_PATHS.PROFILE}>
               <Profile />
             </Route>

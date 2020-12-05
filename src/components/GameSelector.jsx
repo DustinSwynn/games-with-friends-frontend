@@ -9,23 +9,26 @@ import { ReactComponent as Back } from '../assets/back.svg';
 
 const useStyles = () => ({
   wrapper: css({
-    height: "100%",
-    width: "60%",
-    display: "flex",
+    height: "350px",
+    textAlign: "center"    
+  }),
+  navContainer: css({
+    position: "relative"
   }),
   gameContainer: css({
-    position: "absolute",
+    position: "relative",
+    display: "inline-block",
     width: "250px",
-    height: "40%",
+    height: "100%",
     backgroundColor: "rgba(95, 96, 98, 0.4)",
     color: "#FFFFFF",
     border: "2px solid gray",
     borderRadius: "20px",
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    margin: "auto",
+    // top: 0,
+    // right: 0,
+    // bottom: 0,
+    // left: 0,
+    margin: "0px 20px 0px 0px",
     "&:hover": {
       cursor: "pointer",
       backgroundColor: "rgba(95, 96, 98, 0.5)"
@@ -61,13 +64,16 @@ const GameSelector = () => {
 
   return (
     <div css={styles.wrapper}>
-      {/* <Back css={styles.arrowBack}/> */}
       <NavLink to="/codenames">
         <div css={styles.gameContainer}>
           <h3 css={styles.game}>Codenames</h3>
         </div>
       </NavLink>
-      {/* <Next css={styles.arrowNext}/> */}
+      <NavLink to="/battleship">
+        <div css={styles.gameContainer}>
+          <h3 css={styles.game}>Battle Ship</h3>
+        </div>
+      </NavLink>
     </div>
   );
 }

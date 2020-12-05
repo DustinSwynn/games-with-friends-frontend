@@ -17,7 +17,7 @@ import { postLogin } from './clientAPIs/login';
 import Masthead from './components/Masthead';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage/LandingPage';
-import Chat from './components/Chat';
+import Chat from './Chat';
 
 const useStyles = () => ({
   wrapper: css({

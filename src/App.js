@@ -6,6 +6,8 @@ import logo from './logo.svg';
 import './App.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import Codenames from './pages/Codenames/Codenames';
+import Battleship from './pages/Battleship/Battleship';
+
 import { 
   BrowserRouter as Router, 
   Route, 
@@ -31,6 +33,7 @@ const useStyles = () => ({
     // overflow: "auto"
   })
 });
+
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -58,9 +61,9 @@ function App() {
             <Route path={ROOT_PATHS.CODENAMES}>
               <Codenames />
             </Route>
-            {/* <Route path={ROOT_PATHS.BATTLESHIP}>
-              <BattleShip />
-            </Route> */}
+            <Route path={ROOT_PATHS.BATTLESHIP}>
+              <Battleship />
+            </Route>
             <Route path={ROOT_PATHS.PROFILE}>
               <Profile />
             </Route>

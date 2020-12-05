@@ -14,6 +14,9 @@ import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import { getUser, postFriend } from '../../clientAPIs/profile';
 
 const useStyles = () => ({
+  wrapper: css({
+    textAlign: "left"
+  }),
   header: css({
     textAlign: "left"
   }),
@@ -23,7 +26,10 @@ const useStyles = () => ({
   }),
   inputLabel: css({
     textAlign: "left"
-  })
+  }),
+  // userId: css({
+  //   textAlign: 
+  // })
 });
 
 const FriendsList = () => {
@@ -69,10 +75,15 @@ const FriendsList = () => {
     })
   );
 
+  const currentUserId = (
+    <div>Your User Id: {user.sub}</div>
+  )
+
   return (
-    <div>
-      <h2 css={styles.header}>Friends</h2>
-      <form css={styles.form}>
+    <div css={styles.wrapper}>
+      <h2>Friends</h2>
+      {currentUserId}
+      <form>
         <div></div> 
         <InputLabel>Add a friend</InputLabel>
         <InputBase color="primary" placeholder="Friend ID" onChange={e => setFriendId(e.target.value)} />

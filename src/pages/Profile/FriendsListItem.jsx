@@ -25,7 +25,7 @@ const FriendsListItem = ({ name }) => {
 
   return (
     <div css={styles.wrapper}>
-      <div css={styles.column} style={{ padding: "6px 8px"}}>
+      <div css={styles.column} style={{ padding: "6px 0px 8px 0px" }}>
         {name}
       </div>
       <div css={styles.column}>

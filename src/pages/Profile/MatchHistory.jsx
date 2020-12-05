@@ -28,6 +28,10 @@ const useStyles = () => ({
     padding: "20px",
     marginBottom: "20px",
     border: "1px solid black"
+  },
+  noHistory: {
+    textAlign: "left",
+    padding: "20px"
   }
 });
 
@@ -39,9 +43,8 @@ const MatchHistory = () => {
   const [body, setBody] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
-  // getMatchHistory(user.sub)
   useEffect(() => {
-    getUser("test5")
+    getUser(user.sub)
       .then(res => {
         let record = res.data.record;
         setMatchDetails(record);
@@ -62,11 +65,10 @@ const MatchHistory = () => {
   let winLoss;
   let winLossContainer;
 
-  if (!isLoading) {
+  if (!isLoading && matchDetails) {
     matchHistories = (
       matchDetails.map((match, i) => {
         let date = toDateTime(match.when._seconds).toDateString();
-        // console.log("DATE", date.toDateString());
         let outcome;
         if (match.win === true) {
           outcome = "Win";
@@ -108,6 +110,10 @@ const MatchHistory = () => {
     )
   };
 
+  const noHistory = (
+    <div css={styles.noHistory}>Play a game to add to your match history!</div>
+  )
+
   
   return (
     <div>
@@ -123,7 +129,10 @@ const MatchHistory = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {matchHistories}
+            {matchHistories 
+              ? matchHistories 
+              : noHistory
+            }
           </TableBody>
         </Table>
       </TableContainer>

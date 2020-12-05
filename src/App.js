@@ -19,6 +19,7 @@ import { postLogin } from './clientAPIs/profile';
 import Masthead from './components/Masthead';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage/LandingPage';
+import Chat from './Chat';
 import Profile from './pages/Profile/Profile';
 import ProfileMenu from './components/ProfileMenu';
 // import BattleShip from './pages/Battleship/Battleship';
@@ -50,6 +51,8 @@ function App() {
       <Router>
       <Masthead />
       <Navbar />
+      <Chat />
+      {/* </Router> */}
         <div css={styles.wrapper}>
           <Switch>
             <Route exact path={ROOT_PATHS.INDEX}>

@@ -27,6 +27,7 @@ export const postLogin = ( name, nickname, email, id ) => {
     });
 };
 
+// Function used to get match history and friends list
 export const getUser = ( id ) => {
 
   let p = axios.get(baseProfileServerAddress + "/api/profile/history", {
@@ -40,7 +41,7 @@ export const getUser = ( id ) => {
 
   return p
     .then(res => {
-      console.log("Match history reponse:", res);
+      // console.log("Match history reponse:", res);
       return res;
     })
     .catch(err => {
@@ -48,15 +49,14 @@ export const getUser = ( id ) => {
     });
 };
 
-export const postFriend = ( id ) => {
+export const postFriend = ( userId, friendId ) => {
 
   let body = {
-    id: id
+    userId: userId,
+    friendId: friendId
   };
 
-  console.log("ID", id);
-
-  let p = axios.post(baseProfileServerAddress + "/api/profile/friend", body, {
+  let p = axios.post(baseProfileServerAddress + "/api/profile/addFriend", body, {
     headers: {
       "Content-Type": "application/json",
     }

@@ -3,6 +3,7 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = () => ({
   wrapper: css({
@@ -23,6 +24,7 @@ const FriendsListItem = ({ name }) => {
 
   const styles = useStyles();
 
+
   return (
     <div css={styles.wrapper}>
       <div css={styles.column} style={{ padding: "6px 0px 8px 0px" }}>
@@ -34,9 +36,12 @@ const FriendsListItem = ({ name }) => {
         </Button>
       </div>
       <div css={styles.column}>
+      <NavLink to="/">
         <Button color="primary">
           Start Game
         </Button>
+      </NavLink>
+        
       </div>
     </div>
   );

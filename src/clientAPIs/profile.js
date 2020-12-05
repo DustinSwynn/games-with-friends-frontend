@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseProfileServerAddress = 'http://localhost:8080'; // "http://backend-dot-second-folio-294223.nn.r.appspot.com"
+const baseProfileServerAddress = 'https://backend-dot-second-folio-294223.nn.r.appspot.com'; // "http://backend-dot-second-folio-294223.nn.r.appspot.com"
 
 export const postLogin = ( name, nickname, email, id ) => {
 

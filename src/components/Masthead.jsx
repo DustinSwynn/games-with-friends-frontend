@@ -5,8 +5,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
 import { ReactComponent as Logo } from '../assets/board-game.svg';
-import LoginButton from '../auth/LoginButton';
-import LogoutButton from '../auth/LogoutButton';
+import ProfileMenu from "./ProfileMenu";
+import { NavLink } from 'react-router-dom';
 
 const useStyles = () => ({
   wrapper: css({
@@ -40,24 +40,28 @@ const useStyles = () => ({
 });
 
 const Masthead = () => {
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   const styles = useStyles();
 
-    return (
-      <div css={styles.wrapper}>
-        <div css={styles.logoWrapper}>
+  return (
+    <div css={styles.wrapper}>
+      <div css={styles.logoWrapper}>
+        <NavLink 
+          to="/"
+          activeStyle={{
+            textDecoration: "none"
+          }}
+        >
           <Logo css={styles.logo} />
           <h1 css={styles.name}>Games with Friends</h1>
-        </div>
-        <div css={styles.authButton}>
-          {isAuthenticated
-            ? <LogoutButton />
-            : <LoginButton />
-          }
-        </div>
+        </NavLink>
       </div>
-    );
+      <div css={styles.authButton}>
+        <ProfileMenu />
+      </div>
+    </div>
+  );
 }
 
 export default Masthead;

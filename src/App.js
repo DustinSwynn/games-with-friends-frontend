@@ -13,11 +13,14 @@ import {
 } from 'react-router-dom';
 
 import { ROOT_PATHS } from './utils/constants';
-import { postLogin } from './clientAPIs/login';
+import { postLogin } from './clientAPIs/profile';
 import Masthead from './components/Masthead';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Chat from './Chat';
+import Profile from './pages/Profile/Profile';
+import ProfileMenu from './components/ProfileMenu';
+// import BattleShip from './pages/Battleship/Battleship';
 
 const useStyles = () => ({
   wrapper: css({
@@ -38,14 +41,15 @@ function App() {
     if (!isLoading && isAuthenticated) {
       postLogin(user.name, user.nickname, user.email, user.sub);
     }
-  }, [isLoading]);
+  }, [isLoading, isAuthenticated]);
 
   return (
     <div className="App">
+      <Router>
       <Masthead />
       <Navbar />
       <Chat />
-      <Router>
+      {/* </Router> */}
         <div css={styles.wrapper}>
           <Switch>
             <Route exact path={ROOT_PATHS.INDEX}>
@@ -53,6 +57,12 @@ function App() {
             </Route>
             <Route path={ROOT_PATHS.CODENAMES}>
               <Codenames />
+            </Route>
+            {/* <Route path={ROOT_PATHS.BATTLESHIP}>
+              <BattleShip />
+            </Route> */}
+            <Route path={ROOT_PATHS.PROFILE}>
+              <Profile />
             </Route>
           </Switch>
         </div>

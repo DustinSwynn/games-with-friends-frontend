@@ -1,7 +1,16 @@
 // /** @jsxRuntime classic */
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import {blue, red, grey} from '@material-ui/core/colors';
+import {blue, red, grey, yellow} from '@material-ui/core/colors';
+
+const colourDict = {
+	'Black': grey[900],
+	'White': grey[50],
+	'Blue': blue[500],
+	'Red': red[700],
+	'Beige': yellow[100],
+	'None': grey[100] 
+};
 
 const useStyles = (color) => ({
 	wrapper: css({
@@ -9,7 +18,7 @@ const useStyles = (color) => ({
 		height: '50px',
 		fontSize: 'large',
 		borderRadius: '5px',
-		backgroundColor: (color === 'Black') ? grey[900] : (color === 'Blue' ? blue[500] : red[700]),
+		backgroundColor: colourDict[color],
 		color: color === 'Black' ? grey[50] : grey[900]
 	})
 });

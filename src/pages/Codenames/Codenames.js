@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { InputLabel, Input, Button } from '@material-ui/core';
-import { setGameid, setUser, postUpdate, postStart, postHint, postGuess, postEnd } from '../../clientAPIs/codenames';
+import { setId, postUpdate, postStart, postHint, postGuess, postEnd } from '../../clientAPIs/codenames';
 import Board from './Board';
 import AgentMap from './AgentMap';
 
@@ -9,8 +9,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 const Codenames = () => {
 
   const { user, isLoading, isAuthenticated } = useAuth0();
-
-  var intervalVar;
 
   // enums don't exist in JavaScript and this is the next best thing according to StackOverflow...
   // https://stackoverflow.com/questions/287903/what-is-the-preferred-syntax-for-defining-enums-in-javascript
@@ -45,7 +43,8 @@ const Codenames = () => {
       number: 0
     },
     guessesLeft: 0,
-    team: ''
+    team: '',
+    board: []
   });
 
   const handleOnChangeHint = (hint) => {
@@ -59,14 +58,22 @@ const Codenames = () => {
   };
 
   const handleOnChangeGameId = (id) => {
-    setGameId(id);
-    console.log("Game ID:", id);
-    handleOnSubmit(actions.UPDATE);
+    if( gameId !== id ) {
+      setGameId(id);
+      console.log("Setting game ID to:", id);
+      //handleOnSubmit(actions.UPDATE);
+    } else {
+      console.log("Game ID did not change from:", id);
+    }
   };
 
   const handleOnChangeGame = (gameData) => {
-    setGame(gameData);
-    console.log("Game: ", gameData);
+    if( JSON.stringify(game) !== JSON.stringify(gameData) ) {
+      setGame(gameData);
+      console.log("Updated game to:" , gameData);
+    } else {
+      console.log("Game did not change from: ", gameData);
+    }
   }
 
   const handleOnChangePlayer = (playerData) => {
@@ -93,22 +100,21 @@ const Codenames = () => {
     switch(subAction) {
 
       case actions.START:
-        gameRes = postStart();
+        gameRes = postStart(player);
         break;
       case actions.HINT:
-        gameRes = postHint(hint, number);
+        gameRes = postHint(player, hint, number);
         document.getElementById('hintWord').value = '';
         document.getElementById('hintNum').value = 1;
         break;
       case actions.GUESS:
-        console.log("handleOnSubmit exrraParm: ", extraParm);
-        gameRes = postGuess(extraParm);
+        gameRes = postGuess(player, extraParm);
         break;
       case actions.END:
-        gameRes = postEnd();
+        gameRes = postEnd(player);
         break;
       case actions.UPDATE:
-        gameRes = postUpdate();
+        gameRes = postUpdate(player);
         break;
       default:
         console.log("Error: Unexpected subAction [" + subAction + "] received in handleOnSubmit!");
@@ -122,6 +128,7 @@ const Codenames = () => {
 
     gameRes
       .then( data => {
+        
         console.log(data);
 
         if( typeof data == 'undefined' ) {
@@ -129,140 +136,151 @@ const Codenames = () => {
           return;
         }
 
-        handleOnChangeGameId(data.gameId);
-        handleOnChangeGame(data.game);
-        
-        var winnerStr = document.getElementById('winner');
-        var teamTurnStr = document.getElementById('team');
-        var blueLeftStr = document.getElementById('blueLeft');
-        var redLeftStr = document.getElementById('redLeft');
-        var phaseStr = document.getElementById('phase');
-        var hintStr = document.getElementById('hint');
-        var guessesStr = document.getElementById('guessesLeft');
+        //if( gameId !== data.gameId ) {
+          handleOnChangeGameId(data.gameId);
+        //}
 
-        // Cannot use game state variable here because there is a very real possibility useState() has not returned yet
-        
-        if( data.game.winner !== '' ) {
-          winnerStr.hidden = false;
-          teamTurnStr.hidden = true;
-          blueLeftStr.hidden = true;
-          redLeftStr.hidden = true;
-          phaseStr.hidden = true;
-          hintStr.hidden = true;
-          guessesStr.hidden = true;
-          return;
-        }
-
-        winnerStr.hidden = true;
-        teamTurnStr.hidden = false;
-        blueLeftStr.hidden = false;
-        redLeftStr.hidden = false;
-        phaseStr.hidden = false;
-        console.log("Hinting?:", (data.game.phase === 'Hinting' ? true : false));
-        hintStr.hidden = (data.game.phase === 'Hinting' ? true : false);
-        guessesStr.hidden = (data.game.phase === 'Hinting' ? true : false);
+        //if( JSON.stringify(game) !== JSON.stringify(data.game) ) {
+          handleOnChangeGame(data.game);
+          hideElements(data.game.winner, data.game.phase);
+        //}
 
       })
 
   }
 
-  function pollServer() {
+  function hideElements(gameWinner, gamePhase) {
 
-    console.log("Calling pollServer()");
+    var winnerStr = document.getElementById('winner');
+    var teamTurnStr = document.getElementById('team');
+    var blueLeftStr = document.getElementById('blueLeft');
+    var redLeftStr = document.getElementById('redLeft');
+    var phaseStr = document.getElementById('phase');
+    var hintStr = document.getElementById('hint');
+    var guessesStr = document.getElementById('guessesLeft');
+    
+    if( gameWinner !== '' ) {
+      winnerStr.hidden = false;
+      teamTurnStr.hidden = true;
+      blueLeftStr.hidden = true;
+      redLeftStr.hidden = true;
+      phaseStr.hidden = true;
+      hintStr.hidden = true;
+      guessesStr.hidden = true;
+      return;
+    }
 
-    clearInterval(intervalVar);
-    intervalVar = setInterval(handleOnSubmit(actions.UPDATE), 1000);
+    winnerStr.hidden = true;
+    teamTurnStr.hidden = false;
+    blueLeftStr.hidden = false;
+    redLeftStr.hidden = false;
+    phaseStr.hidden = false;
+    hintStr.hidden = (gamePhase === 'Hinting' ? true : false);
+    guessesStr.hidden = (gamePhase === 'Hinting' ? true : false);
 
   }
 
   function onClickCard(guessWord) {
 
-    console.log("onClickCard:", guessWord);
-
-    //handleOnChangeGuess(guessWord);
     handleOnSubmit(actions.GUESS, guessWord);
 
   }
 
+  console.log("render");
+
+  useEffect( () => {
+    const interval = setInterval(handleOnSubmit(actions.UPDATE), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div>
+   
+    <div style={{
+      display: 'grid',
+      width: '100%',
+      gridTemplateColumns: 'auto auto auto',
+      gridGap: '5px'
+    }}>
 
-      <br />
+      <div>
+        <h1 id="winner" hidden='true'>The {game.winner} team has won!</h1>
+        <h1 id="team" hidden='true'>It is currently the {game.team} team's turn</h1>
+        <h2 id="blueLeft" hidden='true'>Blue Agents Left: {game.blueLeft}</h2>
+        <h2 id="redLeft" hidden='true'>Red Agents Left: {game.redLeft}</h2>
+        <p id="phase" hidden='true'>Waiting for the {game.team} team's {game.phase === 'Hinting' ? 'Spymaster to give a hint' : 'Agents to make a guess'} </p>
+        <p id="hint" hidden='true'>The hint provided is [{game.hint.word}, {game.hint.number}]</p>
+        <p id="guessesLeft" hidden='true'>The {game.team} team has {game.guessesLeft} guesses left</p>
+      </div>
 
-      <Board cards={game.grid} handleClick={onClickCard} />
+      <div name="Board">
 
-      <br /><br />
+        { player.role === 'Spymaster' ?
 
-      <AgentMap cards={game.map} />
+          <div id='spymaster_view'>
+            <AgentMap cards={game.board} />
+            <br /><br />
+            <InputLabel>Hint Word:
+              <Input type="text" id="hintWord" onChange={event => handleOnChangeHint(event.target.value)} />
+            </InputLabel>
+            <InputLabel>Hint Number:
+              <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
+            </InputLabel>
+            <br />
+            <Button variant="contained" onClick={() => handleOnSubmit(actions.HINT)}>
+              Submit Hint
+            </Button>
+          </div>
+        
+          : 
 
-      <br /><br /><br /><br />
+          <Board cards={game.board} handleClick={onClickCard} />
+        }
+      </div>
 
-      <h1 id="winner" hidden='true'>The {game.winner} team has won!</h1>
-      <h1 id="team" hidden='true'>It is currently the {game.team} team's turn</h1>
-      <h2 id="blueLeft" hidden='true'>Blue Agents Left: {game.blueLeft}</h2>
-      <h2 id="redLeft" hidden='true'>Red Agents Left: {game.redLeft}</h2>
-      <p id="phase" hidden='true'>Waiting for the {game.team} team's {game.phase === 'Hinting' ? 'Spymaster to give a hint' : 'Agents to make a guess'} </p>
-      <p id="hint" hidden='true'>The hint provided is [{game.hint.word}, {game.hint.number}]</p>
-      <p id="guessesLeft" hidden='true'>The {game.team} team has {game.guessesLeft} guesses left</p>
+      <div>
 
-      <br /><br /><br />
+        <br />
 
-      <div id='player_inputs'>
+        <div id='join_inputs'>
+          <Button variant="contained" onClick={() => setId(gameId)} style={{marginLeft: '0px'}}>
+            Set Game ID
+          </Button>
+          <InputLabel>Game ID:
+            <Input type="text" id="joinId" onChange={event => handleOnChangeGameId(event.target.value)} />
+          </InputLabel>
+        </div>
+
+        <br />
+
         <Button variant="contained" onClick={() => handleOnChangePlayer({team: (player.team === 'Blue' ? 'Red' : 'Blue')})}>
           Switch to {player.team === 'Blue' ? 'Red' : 'Blue'} team
         </Button>
         <Button variant="contained" onClick={() => handleOnChangePlayer({role: (player.role === 'Agent' ? 'Spymaster' : 'Agent')})}>
           Switch to {player.role === 'Agent' ? 'Spymaster' : 'Agent'}
         </Button>
-      </div>
 
-      <div id='join_inputs'>
-        <br /><br /><br />
-        <InputLabel>Game ID:
-          <Input type="text" id="joinId" onChange={event => handleOnChangeGameId(event.target.value)} />
-        </InputLabel>
-        <br />
-        <Button variant="contained" onClick={() => setGameid(gameId)}>
-          Set Game ID
+        <br /><br />
+
+        <Button variant="contained" onClick={() => handleOnSubmit(actions.START)}>
+          Start a New Game
         </Button>
-      </div>
 
-      <br /><br /><br />
+        <br /><br />
 
-      <Button variant="contained" onClick={() => handleOnSubmit(actions.START)}>
-        Start a New Game
-      </Button>
-
-      <br /><br /><br />
-
-      <div id='hint_inputs'>
-        <InputLabel>Hint Word:
-          <Input type="text" id="hintWord" onChange={event => handleOnChangeHint(event.target.value)} />
-        </InputLabel>
-        <InputLabel>Hint Number:
-          <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
-        </InputLabel>
-        <br />
-        <Button variant="contained" onClick={() => handleOnSubmit(actions.HINT)}>
-          Submit Hint
+        <Button variant="contained" onClick={() => handleOnSubmit(actions.END)}>
+          End Turn
         </Button>
+
+        <p id="game">Game ID: {gameId}</p>
+        <p id="username">User Name: {player.username}</p>
+        <p id="userid">User ID: {player.userid}</p>
+        <p id="playerTeam">Team: {player.team}</p>
+        <p id="playerRole">Role: {player.role}</p>
+
       </div>
 
-      <br /><br /><br />
+    </div>  
 
-      <Button variant="contained" onClick={() => handleOnSubmit(actions.END)}>
-        End Turn
-      </Button>
-
-      <br /><br /><br />
-
-      <p id="game">Game ID: {gameId}</p>
-      <p id="username">User Name: {player.username}</p>
-      <p id="userid">User ID: {player.userid}</p>
-      <p id="playerTeam">Team: {player.team}</p>
-      <p id="playerRole">Role: {player.role}</p>
-
-    </div>
   );
 };
 

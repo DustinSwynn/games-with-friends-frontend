@@ -8,7 +8,7 @@ const useStyles = () => ({
 		display: 'grid',
 		width: '500px',
 		height: '250px',
-		margin: '0 auto',
+		margin: '10px 10px',
 		gridTemplateColumns: 'auto auto auto auto auto',
 		gridGap: '5px'
 	})
@@ -21,7 +21,7 @@ const AgentMap = ({cards}) => {
 	return (
 		<div css={styles.wrapper} >
 			{cards.map((card, i) => (
-				<Card key={i} word={card.type} color={card.colour === 'None' ? 'WhiteSmoke' : card.colour} onClick={() => null} />
+				<Card key={i} word={card.word} color={card.colour} onClick={() => null} />
 			))}
 		</div>
 	)

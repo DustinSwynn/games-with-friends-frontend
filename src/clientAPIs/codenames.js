@@ -9,7 +9,7 @@ var playerTeam = '';
 var playerRole = '';
 
 // Not sure if this is needed, but I need some way to see the gameId
-export const setGameid = (id) => {
+export const setId = (id) => {
 
   gameId = id;
   console.log("Set gameId to [" + id + "]");
@@ -32,12 +32,8 @@ export const setUser = (userid, username, team, role) => {
 // Handles actually posting messages
 export const postMessage = (body) => {
 
-  body.userid = playerId;
-  body.username = playerName;
-  body.team = playerTeam;
-  body.role = playerRole;
-
   console.log("gameId:", gameId)
+  console.log("Posting body:", body);
 
   let p = axios.post(baseGameServerAddress + "/game/" + gameId, body, {
     header: {
@@ -58,69 +54,64 @@ export const postMessage = (body) => {
 }
 
 // Ask the server for an update
-export const postUpdate = () => {
+export const postUpdate = (playerData) => {
 
   console.log("Posting an update request");
 
-  var body = {
-    action: 'update'
-  }
-
-  return postMessage(body);
+  return postMessage({
+    action: 'update',
+    ...playerData
+  });
 
 }
 
 // Asks for the game to be started/restarted
-export const postStart = () => {
+export const postStart = (playerData) => {
 
   console.log("Posting start");
 
-  var body = {
-    action: 'start'
-  }
-
-  return postMessage(body);
+  return postMessage({
+    action: 'start',
+    ...playerData
+  });
 
 }
 
 // Send a hint to the server
-export const postHint = (hint, number) => {
+export const postHint = (playerData, hint, number) => {
 
   console.log("Posting hint: [" + hint + ", " + number + "]");
 
-  var body = {
+  return postMessage({
     action: 'hint',
     hintWord: hint,
-    hintNum: number
-  }
-
-  return postMessage(body);
+    hintNum: number,
+    ...playerData
+  });
 
 }
 
 // Send a guess to the server
-export const postGuess = (guess) => {
+export const postGuess = (playerData, guess) => {
 
   console.log("Posting guess: [" + guess + "]");
 
-  var body = {
+  return postMessage({
     action: 'guess',
-    guessWord: guess
-  }
-
-  return postMessage(body);
+    guessWord: guess,
+    ...playerData
+  });
 
 }
 
 // Ask for the current turn to be ended
-export const postEnd = () => {
+export const postEnd = (playerData) => {
 
   console.log("Posting end");
 
-  var body = {
-    action: 'end'
-  }
-
-  return postMessage(body);
+  return postMessage({
+    action: 'end',
+    ...playerData
+  });
 
 }

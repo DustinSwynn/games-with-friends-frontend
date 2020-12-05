@@ -6,11 +6,11 @@ import Card from './Card';
 const useStyles = () => ({
 	wrapper: css({
 		display: 'grid',
-		backgroundColor: 'WhiteSmoke',
 		width: '500px',
 		height: '250px',
 		margin: '0 auto',
-		gridTemplateColumns: 'auto auto auto auto auto'
+		gridTemplateColumns: 'auto auto auto auto auto',
+		gridGap: '5px'
 	})
 });
 

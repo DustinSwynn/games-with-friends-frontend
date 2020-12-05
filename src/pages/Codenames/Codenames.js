@@ -59,7 +59,7 @@ const Codenames = () => {
 
   const handleOnChangeGameId = (id) => {
     if( gameId !== id ) {
-      setGameId(id);
+      setGameId(id, player);
       console.log("Setting game ID to:", id);
       //handleOnSubmit(actions.UPDATE);
     } else {
@@ -103,14 +103,23 @@ const Codenames = () => {
         gameRes = postStart(player);
         break;
       case actions.HINT:
+        if( player.team !== game.team ) {
+          return;
+        }
         gameRes = postHint(player, hint, number);
         document.getElementById('hintWord').value = '';
         document.getElementById('hintNum').value = 1;
         break;
       case actions.GUESS:
+        if( player.team !== game.team ) {
+          return;
+        }
         gameRes = postGuess(player, extraParm);
         break;
       case actions.END:
+        if( player.team !== game.team ) {
+          return;
+        }
         gameRes = postEnd(player);
         break;
       case actions.UPDATE:
@@ -188,10 +197,17 @@ const Codenames = () => {
 
   console.log("render");
 
-  useEffect( () => {
-    const interval = setInterval(handleOnSubmit(actions.UPDATE), 1000);
-    return () => clearInterval(interval);
-  }, []);
+  var intervalVar;
+
+  clearInterval(intervalVar);
+  intervalVar = setInterval(handleOnSubmit(actions.UPDATE), 1000);
+
+
+  // setInterval(useEffect( (player) => {
+  //   const interval = setInterval(setGame(postUpdate(player)), 1000);
+  //   return () => clearInterval(interval);
+  // }), 1000);
+
 
   return (
    
@@ -219,19 +235,21 @@ const Codenames = () => {
           <div id='spymaster_view'>
             <AgentMap cards={game.board} />
             <br /><br />
-            <InputLabel>Hint Word:
-              <Input type="text" id="hintWord" onChange={event => handleOnChangeHint(event.target.value)} />
-            </InputLabel>
-            <InputLabel>Hint Number:
-              <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
-            </InputLabel>
-            <br />
-            <Button variant="contained" onClick={() => handleOnSubmit(actions.HINT)}>
-              Submit Hint
-            </Button>
+            <div>
+              <InputLabel>Hint Word:
+                <Input type="text" id="hintWord" onChange={event => handleOnChangeHint(event.target.value)} />
+              </InputLabel>
+              <InputLabel>Hint Number:
+                <Input type="number" id="hintNum" onChange={event => handleOnChangeNumber(event.target.value)} />
+              </InputLabel>
+              <br />
+              <Button variant="contained" onClick={() => handleOnSubmit(actions.HINT)}>
+                Submit Hint
+              </Button>
+            </div>
           </div>
         
-          : 
+          :
 
           <Board cards={game.board} handleClick={onClickCard} />
         }
@@ -242,19 +260,28 @@ const Codenames = () => {
         <br />
 
         <div id='join_inputs'>
-          <Button variant="contained" onClick={() => setId(gameId)} style={{marginLeft: '0px'}}>
-            Set Game ID
-          </Button>
+          
           <InputLabel>Game ID:
             <Input type="text" id="joinId" onChange={event => handleOnChangeGameId(event.target.value)} />
           </InputLabel>
+          <br />
+          <Button variant="contained" onClick={() => setId(gameId)} style={{marginLeft: '0px'}}>
+            Set Game ID
+          </Button>
         </div>
 
         <br />
 
+        <Button variant="contained" onClick={() => handleOnSubmit(actions.UPDATE)}>
+          Update
+        </Button>
+
+        <br /><br />
+
         <Button variant="contained" onClick={() => handleOnChangePlayer({team: (player.team === 'Blue' ? 'Red' : 'Blue')})}>
           Switch to {player.team === 'Blue' ? 'Red' : 'Blue'} team
         </Button>
+        <br /><br />
         <Button variant="contained" onClick={() => handleOnChangePlayer({role: (player.role === 'Agent' ? 'Spymaster' : 'Agent')})}>
           Switch to {player.role === 'Agent' ? 'Spymaster' : 'Agent'}
         </Button>
@@ -279,7 +306,7 @@ const Codenames = () => {
 
       </div>
 
-    </div>  
+    </div>
 
   );
 };

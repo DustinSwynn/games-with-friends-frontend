@@ -6,10 +6,10 @@ import Card from './Card';
 const useStyles = () => ({
 	wrapper: css({
 		display: 'grid',
-		width: '500px',
-		height: '250px',
+		width: 'auto',
+		height: 'auto',
 		margin: '10px 10px',
-		gridTemplateColumns: 'auto auto auto auto auto',
+		gridTemplateColumns: '100px 100px 100px 100px 100px',
 		gridGap: '5px'
 	})
 });
@@ -21,7 +21,7 @@ const Board = ({cards, handleClick}) => {
 	return (
 		<div css={styles.wrapper} >
 			{cards.map((card, i) => (
-				<Card key={i} word={card.word} color={card.chosen ? card.colour : 'None'} onClick={() => handleClick(card.word)} />
+				<Card key={i} word={card.word} chosen={false} color={card.chosen ? card.colour : 'None'} onClick={() => handleClick(card.word)} />
 			))}
 		</div>
 	)

@@ -3,29 +3,14 @@ import axios from "axios";
 const baseGameServerAddress = 'http://localhost:8080/codenames'; // "http://backend-dot-second-folio-294223.nn.r.appspot.com"
 
 var gameId = '';
-var playerId = '';
-var playerName = '';
-var playerTeam = '';
-var playerRole = '';
 
 // Not sure if this is needed, but I need some way to see the gameId
-export const setId = (id) => {
+export const setId = (id, playerData) => {
 
   gameId = id;
   console.log("Set gameId to [" + id + "]");
 
-  postUpdate();
-
-}
-
-// Same as above
-export const setUser = (userid, username, team, role) => {
-
-  playerId = userid;
-  playerName = username;
-  playerTeam = team;
-  playerRole = role;
-  console.log("User joined team [" + team + "] as a(n) [" + role + "]")
+  postUpdate(playerData);
 
 }
 

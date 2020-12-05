@@ -18,18 +18,19 @@ const useStyles = (color) => ({
 		height: '50px',
 		fontSize: 'large',
 		borderRadius: '5px',
+		margin: '0xp 0px',
 		backgroundColor: colourDict[color],
 		color: color === 'Black' ? grey[50] : grey[900]
 	})
 });
 
-const Card = ({word, color, onClick}) => {
+const Card = ({word, color, chosen, onClick}) => {
 
 	const styles = useStyles(color);
 
 	return (
 		<div>
-			<button css={styles.wrapper} onClick={() => onClick()}>{word}</button>
+			<button css={styles.wrapper} style={chosen ? {'textDecoration': 'line-through'} : {'textDecoration': 'none'}} onClick={() => onClick()}>{word}</button>
 		</div>
 	)
 	

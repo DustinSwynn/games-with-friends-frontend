@@ -55,12 +55,6 @@ const MatchHistory = () => {
       });
   }, []);
 
-  const toDateTime = (secs) => {
-    const t = new Date(1970, 0, 1);
-    t.setSeconds(secs);
-    return t;
-  }
-
   let matchHistories;
   let winLoss;
   let winLossContainer;
@@ -68,7 +62,7 @@ const MatchHistory = () => {
   if (!isLoading && matchDetails) {
     matchHistories = (
       matchDetails.map((match, i) => {
-        let date = toDateTime(match.when._seconds).toDateString();
+        let date = match.when;
         let outcome;
         if (match.win === true) {
           outcome = "Win";

@@ -60,8 +60,7 @@ const Codenames = () => {
   const handleOnChangeGameId = (id) => {
     if( gameId !== id ) {
       setGameId(id, player);
-      console.log("Setting game ID to:", id);
-      //handleOnSubmit(actions.UPDATE);
+      setId(id);
     } else {
       console.log("Game ID did not change from:", id);
     }
@@ -145,14 +144,9 @@ const Codenames = () => {
           return;
         }
 
-        //if( gameId !== data.gameId ) {
-          handleOnChangeGameId(data.gameId);
-        //}
-
-        //if( JSON.stringify(game) !== JSON.stringify(data.game) ) {
-          handleOnChangeGame(data.game);
-          hideElements(data.game.winner, data.game.phase);
-        //}
+        handleOnChangeGameId(data.gameId);
+        handleOnChangeGame(data.game);
+        hideElements(data.game.winner, data.game.phase);
 
       })
 
@@ -203,10 +197,22 @@ const Codenames = () => {
   intervalVar = setInterval(handleOnSubmit(actions.UPDATE), 1000);
 
 
-  // setInterval(useEffect( (player) => {
-  //   const interval = setInterval(setGame(postUpdate(player)), 1000);
-  //   return () => clearInterval(interval);
-  // }), 1000);
+  setInterval(useEffect( (player) => {
+    const interval = setInterval(() => {
+      let retData = postUpdate(player);
+      retData
+        .then(data => {
+          if( typeof data != 'undefined' ) {
+            handleOnChangeGameId(data.gameId);
+            handleOnChangeGame(data.game);
+            hideElements(data.game.winner, data.game.phase);
+          } else {
+            console.log("Error: Polling failed to return a valid response");
+          }
+        })
+    }, 1000);
+    return () => clearInterval(interval);
+  }), 1000);
 
 
   return (
@@ -258,25 +264,18 @@ const Codenames = () => {
       <div>
 
         <br />
-
-        <div id='join_inputs'>
           
-          <InputLabel>Game ID:
-            <Input type="text" id="joinId" onChange={event => handleOnChangeGameId(event.target.value)} />
-          </InputLabel>
-          <br />
-          <Button variant="contained" onClick={() => setId(gameId)} style={{marginLeft: '0px'}}>
-            Set Game ID
-          </Button>
-        </div>
+        <InputLabel>Game ID:
+          <Input type="text" id="joinId" onChange={event => handleOnChangeGameId(event.target.value)} />
+        </InputLabel>
 
         <br />
 
-        <Button variant="contained" onClick={() => handleOnSubmit(actions.UPDATE)}>
-          Update
+        <Button variant="contained" onClick={() => handleOnSubmit(actions.START)}>
+          Start a New Game
         </Button>
 
-        <br /><br />
+        <br /><br /><br /><br ></br>
 
         <Button variant="contained" onClick={() => handleOnChangePlayer({team: (player.team === 'Blue' ? 'Red' : 'Blue')})}>
           Switch to {player.team === 'Blue' ? 'Red' : 'Blue'} team
@@ -284,12 +283,6 @@ const Codenames = () => {
         <br /><br />
         <Button variant="contained" onClick={() => handleOnChangePlayer({role: (player.role === 'Agent' ? 'Spymaster' : 'Agent')})}>
           Switch to {player.role === 'Agent' ? 'Spymaster' : 'Agent'}
-        </Button>
-
-        <br /><br />
-
-        <Button variant="contained" onClick={() => handleOnSubmit(actions.START)}>
-          Start a New Game
         </Button>
 
         <br /><br />

@@ -1,16 +1,22 @@
 // /** @jsxRuntime classic */
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-import FriendsListItem from './FriendsListItem';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import Paper from '@material-ui/core/Paper';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+import Button from '@material-ui/core/Button';
+import { NavLink } from 'react-router-dom';
 import { getUser, postFriend } from '../../clientAPIs/profile';
 
 const useStyles = () => ({
@@ -20,10 +26,6 @@ const useStyles = () => ({
   header: css({
     textAlign: "left"
   }),
-  form: css({
-    marginBottom: "20px",
-    textAlign: "left",
-  }),
   inputLabel: css({
     textAlign: "left"
   }),
@@ -31,8 +33,15 @@ const useStyles = () => ({
     marginBottom: "20px" 
   }),
   form: css({
-    marginBottom: "30px"
-  })
+    marginBottom: "30px",
+    textAlign: "left"
+  }),
+  table: {
+    minWidth: 650
+  },
+  tableCell: {
+    paddingRight: "8px"
+  }
 });
 
 const FriendsList = () => {
@@ -45,8 +54,6 @@ const FriendsList = () => {
   const [submitClicked, setSubmitClicked] = useState(false);
   const [nicknames, setNicknames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  console.log("FRIEND ID", friendId);
 
   const handleOnSubmit = () => {
     setSubmitClicked(true);
@@ -81,7 +88,27 @@ const FriendsList = () => {
   if (!isLoading && nicknames) {
     friendListItems = (
       nicknames.map((nickname, i) => {
-        return <FriendsListItem name={nickname} key={i} />
+        return (
+          <TableRow key={i}>
+            <TableCell component="th" scope="row">
+              {nickname}
+            </TableCell>
+            <TableCell align="right">
+              <NavLink to="/codenames">
+                <Button color="primary">
+                  Invite Friend
+                </Button>
+              </NavLink>
+            </TableCell>
+            <TableCell align="right">
+              <NavLink to="/battleship">
+                <Button color="primary">
+                  Invite Friend
+                </Button>
+              </NavLink>
+            </TableCell>
+          </TableRow>
+        )
       })
     );
   }
@@ -106,10 +133,23 @@ const FriendsList = () => {
         </IconButton>
       </form>
       <div>
-        {friendListItems
-          ? friendListItems
-          : noFriends
-        }
+        <TableContainer component={Paper}>
+          <Table className={styles.table} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Friend</TableCell>
+                <TableCell align="right" style={{ "padding-right": "32px" }}>Codenames</TableCell>
+                <TableCell align="right" style={{ "padding-right": "24px" }}>Battleship</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {friendListItems
+                ? friendListItems
+                : noFriends
+              }
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   )

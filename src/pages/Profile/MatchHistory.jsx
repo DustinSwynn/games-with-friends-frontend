@@ -6,7 +6,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 import moment from 'moment';
 
 import { getUser } from '../../clientAPIs/profile';
-import MatchHistoryItem from './MatchHistoryItem';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';

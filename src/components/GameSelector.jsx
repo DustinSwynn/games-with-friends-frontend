@@ -70,7 +70,7 @@ const GameSelector = () => {
       <NavLink to="/battleship">
         <div css={styles.gameContainer}>
           <BattleShip css={styles.gameImg} />
-          <h3 css={styles.game}>Battle Ship</h3>
+          <h3 css={styles.game}>Battleship</h3>
         </div>
       </NavLink>
     </div>

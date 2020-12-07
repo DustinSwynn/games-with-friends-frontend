@@ -27,9 +27,9 @@ const useStyles = () => ({
   inputLabel: css({
     textAlign: "left"
   }),
-  // userId: css({
-  //   textAlign: 
-  // })
+  userId: css({
+    marginBottom: "20px" 
+  })
 });
 
 const FriendsList = () => {
@@ -76,7 +76,7 @@ const FriendsList = () => {
   );
 
   const currentUserId = (
-    <div>Your User Id: {user.sub}</div>
+    <div css={styles.userId}>Your User Id: {user.sub}</div>
   )
 
   return (

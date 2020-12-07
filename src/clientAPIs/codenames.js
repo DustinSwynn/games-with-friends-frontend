@@ -10,8 +10,6 @@ export const setId = (id, playerData) => {
   gameId = id;
   console.log("Set gameId to [" + id + "]");
 
-  postUpdate(playerData);
-
 }
 
 // Handles actually posting messages

@@ -29,6 +29,9 @@ const useStyles = () => ({
   }),
   userId: css({
     marginBottom: "20px" 
+  }),
+  form: css({
+    marginBottom: "30px"
   })
 });
 
@@ -42,6 +45,8 @@ const FriendsList = () => {
   const [submitClicked, setSubmitClicked] = useState(false);
   const [nicknames, setNicknames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log("FRIEND ID", friendId);
 
   const handleOnSubmit = () => {
     setSubmitClicked(true);
@@ -71,16 +76,19 @@ const FriendsList = () => {
     })
   }, []);
 
-  let friends;
+  let friendListItems;
 
   if (!isLoading && nicknames) {
-    friends = (
+    friendListItems = (
       nicknames.map((nickname, i) => {
         return <FriendsListItem name={nickname} key={i} />
       })
     );
   }
 
+  const noFriends = (
+    <div>You have no friends, start your list by adding a friend by ID above!</div>
+  )
 
   const currentUserId = (
     <div css={styles.userId}>Your User Id: {user.sub}</div>
@@ -90,15 +98,19 @@ const FriendsList = () => {
     <div css={styles.wrapper}>
       <h2>Friends</h2>
       {currentUserId}
-      <form>
-        <div></div> 
+      <form css={styles.form}>
         <InputLabel>Add a friend</InputLabel>
         <InputBase color="primary" placeholder="Friend ID" onChange={e => setFriendId(e.target.value)} />
         <IconButton type="submit" onClick={handleOnSubmit}>
           <AddCircleOutline />
         </IconButton>
       </form>
-      <div>{friends}</div>
+      <div>
+        {friendListItems
+          ? friendListItems
+          : noFriends
+        }
+      </div>
     </div>
   )
 };

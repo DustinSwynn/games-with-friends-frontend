@@ -19,27 +19,29 @@ import { postLogin } from './clientAPIs/profile';
 import Masthead from './components/Masthead';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage/LandingPage';
-import Chat from './Chat';
+import Chat from './pages/Chat';
 import Profile from './pages/Profile/Profile';
 import ProfileMenu from './components/ProfileMenu';
-// import BattleShip from './pages/Battleship/Battleship';
+import socketClient from 'socket.io-client'
 
 const useStyles = () => ({
   wrapper: css({
-    // width: "100%",
     height: "100%",
-    // padding: "20px",
-    // boxShadow: "0px 0px 5px 0px #000",
-    // overflow: "auto"
   })
 });
 
+// const CHATSERVER = "http://localhost:8081";
+const CHATSERVER = "https://backend-dot-second-folio-294223.nn.r.appspot.com";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const styles = useStyles();
 
-  // Code within useEffect will run after the user is redirected after login is complete
+  var socket = socketClient(CHATSERVER);
+  socket.on('connection', () => {
+    console.log(`I'm connected with the back-end`);
+  });
+
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       postLogin(user.name, user.nickname, user.email, user.sub);
@@ -51,7 +53,6 @@ function App() {
       <Router>
       <Masthead />
       <Navbar />
-      <Chat />
       {/* </Router> */}
         <div css={styles.wrapper}>
           <Switch>
@@ -66,6 +67,9 @@ function App() {
             </Route>
             <Route path={ROOT_PATHS.PROFILE}>
               <Profile />
+            </Route>
+            <Route path={ROOT_PATHS.CHAT}>
+              <Chat />
             </Route>
           </Switch>
         </div>

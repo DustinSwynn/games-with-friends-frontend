@@ -5,6 +5,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
 import GameSelector from '../../components/GameSelector';
+import { Button } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = () => ({
   wrapper: css({
@@ -29,6 +31,9 @@ const LandingPage = () => {
         <h2 css={styles.header}>Welcome to Games with Friends!</h2>
         <h3 css={styles.instructions}>Select a game below to begin playing:</h3>
         <GameSelector />
+        <NavLink to="/chat">
+          <Button variant="contained" color="primary">Join the Community Chat!</Button>
+        </NavLink>
       </div>
     );
 }

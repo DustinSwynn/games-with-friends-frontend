@@ -10,7 +10,8 @@ import { ReactComponent as Codenames } from '../assets/codenames.svg';
 const useStyles = () => ({
   wrapper: css({
     height: "350px",
-    textAlign: "center"    
+    textAlign: "center",
+    marginBottom: "30px"  
   }),
   navContainer: css({
     position: "relative"
@@ -20,14 +21,9 @@ const useStyles = () => ({
     display: "inline-block",
     width: "250px",
     height: "100%",
-    // backgroundColor: "rgba(95, 96, 98, 0.4)",
     color: "#000000",
     border: "2px solid gray",
     borderRadius: "20px",
-    // top: 0,
-    // right: 0,
-    // bottom: 0,
-    // left: 0,
     margin: "0px 20px 0px 0px",
     "&:hover": {
       cursor: "pointer",

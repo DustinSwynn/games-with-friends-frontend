@@ -25,11 +25,12 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "socket.io": "^2.3.0",
+    "socket.io-client": "^3.0.3",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"node server.js\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

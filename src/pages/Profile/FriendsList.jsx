@@ -41,6 +41,7 @@ const FriendsList = () => {
   const [friendId, setFriendId] = useState();
   const [submitClicked, setSubmitClicked] = useState(false);
   const [nicknames, setNicknames] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOnSubmit = () => {
     setSubmitClicked(true);
@@ -61,6 +62,7 @@ const FriendsList = () => {
         getUser(friendId)
           .then(res => {
             setNicknames(nicknames => [...nicknames, res.data.nickname])
+            setIsLoading(false);
           })
       })
     })
@@ -69,11 +71,16 @@ const FriendsList = () => {
     })
   }, []);
 
-  const friends = (
-    nicknames.map((nickname, i) => {
-      return <FriendsListItem name={nickname} key={i} />
-    })
-  );
+  let friends;
+
+  if (!isLoading && nicknames) {
+    friends = (
+      nicknames.map((nickname, i) => {
+        return <FriendsListItem name={nickname} key={i} />
+      })
+    );
+  }
+
 
   const currentUserId = (
     <div css={styles.userId}>Your User Id: {user.sub}</div>

@@ -5,6 +5,7 @@ import Board from './Board';
 import AgentMap from './AgentMap';
 
 import { useAuth0 } from '@auth0/auth0-react';
+import { DesktopWindowsOutlined } from '@material-ui/icons';
 
 const Codenames = () => {
 
@@ -25,6 +26,7 @@ const Codenames = () => {
   const [hint, setHint] = useState("");
   const [number, setNumber] = useState(1);
   const [gameId, setGameId] = useState("");
+  const [screenWidth, setWidth] = useState(window.innerWidth);
   const [player, setPlayer] = useState({
     userid: (!isLoading && isAuthenticated ? user.sub : 'Guest'),
     username: (!isLoading && isAuthenticated ? user.nickname : 'Guest'),
@@ -189,15 +191,9 @@ const Codenames = () => {
 
   }
 
-  console.log("render");
+  console.log("Page rendered");
 
-  var intervalVar;
-
-  clearInterval(intervalVar);
-  intervalVar = setInterval(handleOnSubmit(actions.UPDATE), 1000);
-
-
-  setInterval(useEffect( (player) => {
+  useEffect( (player) => {
     const interval = setInterval(() => {
       let retData = postUpdate(player);
       retData
@@ -212,19 +208,28 @@ const Codenames = () => {
         })
     }, 1000);
     return () => clearInterval(interval);
-  }), 1000);
+  });
 
+  useEffect(() => {
+    function handleOnResize() {
+      setWidth(window.innerWidth);
+      console.log('Window resized to ', window.innerWidth, 'px wide');
+    }
+    window.addEventListener('resize', handleOnResize);
+  });
+
+  var gridColumnValue = Math.floor((screenWidth - 500) / 2).toString() + 'px 500px ' + Math.floor((screenWidth - 500) / 2).toString() + 'px';
 
   return (
    
     <div style={{
       display: 'grid',
       width: '100%',
-      gridTemplateColumns: 'auto auto auto',
+      gridTemplateColumns: gridColumnValue,
       gridGap: '5px'
     }}>
 
-      <div>
+      <div name="info">
         <h1 id="winner" hidden='true'>The {game.winner} team has won!</h1>
         <h1 id="team" hidden='true'>It is currently the {game.team} team's turn</h1>
         <h2 id="blueLeft" hidden='true'>Blue Agents Left: {game.blueLeft}</h2>
@@ -261,7 +266,7 @@ const Codenames = () => {
         }
       </div>
 
-      <div>
+      <div name="inputs">
 
         <br />
           

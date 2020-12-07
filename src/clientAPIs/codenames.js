@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const baseGameServerAddress = 'https://backend-dot-second-folio-294223.nn.r.appspot.com/codenames';
+// const baseGameServerAddress = 'http://localhost:8080/codenames'; // "http://backend-dot-second-folio-294223.nn.r.appspot.com"
 
 var gameId = '';
 

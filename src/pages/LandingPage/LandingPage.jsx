@@ -11,6 +11,12 @@ const useStyles = () => ({
     // width: "100%",
     height: "100%",
     padding: "20px"
+  }),
+  header: css({
+    margin: "30px"
+  }),
+  instructions: css({
+    marginBottom: "30px"
   })
 });
 
@@ -20,6 +26,8 @@ const LandingPage = () => {
 
     return (
       <div css={styles.wrapper}>
+        <h2 css={styles.header}>Welcome to Games with Friends!</h2>
+        <h3 css={styles.instructions}>Select a game below to begin playing:</h3>
         <GameSelector />
       </div>
     );

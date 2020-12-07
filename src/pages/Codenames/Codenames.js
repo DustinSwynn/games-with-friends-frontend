@@ -1,15 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { InputLabel, Input, Button } from '@material-ui/core';
 import { setId, postUpdate, postStart, postHint, postGuess, postEnd } from '../../clientAPIs/codenames';
 import Board from './Board';
 import AgentMap from './AgentMap';
+import { Context as GlobalContext } from '../../context/GlobalContext';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import { DesktopWindowsOutlined } from '@material-ui/icons';
 
 const Codenames = () => {
 
   const { user, isLoading, isAuthenticated } = useAuth0();
+
+  const { 
+    codenames: {
+      gameId,
+      setGameId
+    }
+  } = useContext(GlobalContext);
 
   // enums don't exist in JavaScript and this is the next best thing according to StackOverflow...
   // https://stackoverflow.com/questions/287903/what-is-the-preferred-syntax-for-defining-enums-in-javascript
@@ -25,8 +32,8 @@ const Codenames = () => {
 
   const [hint, setHint] = useState("");
   const [number, setNumber] = useState(1);
-  const [gameId, setGameId] = useState("");
   const [screenWidth, setWidth] = useState(window.innerWidth);
+  // const [gameId, setGameId] = useState("");
   const [player, setPlayer] = useState({
     userid: (!isLoading && isAuthenticated ? user.sub : 'Guest'),
     username: (!isLoading && isAuthenticated ? user.nickname : 'Guest'),

@@ -1,13 +1,14 @@
 import { createContext } from 'react';
-import useAuthenticationContext, { AuthenticationContext } from './AuthenticationContext';
-
+import useAuthenticationContext from './AuthenticationContext';
+import useCodenamesContext from './CodenamesContext';
 
 export const Context = createContext({});
 
 export const Provider = ({ children }) => {
   
   const context = {
-    auth: useAuthenticationContext()
+    auth: useAuthenticationContext(),
+    codenames: useCodenamesContext()
   };
 
   return <Context.Provider value={context}>{children}</Context.Provider>

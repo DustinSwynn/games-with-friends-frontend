@@ -18,7 +18,7 @@ const Battleship = () => {
         //alert("no user id");
     }
 
-    let Url = "0; URL='https://backend-dot-second-folio-294223.nn.r.appspot.com/battleship?userid=" + userId + "'";
+    let Url = "0; URL='https://backend-dot-second-folio-294223.nn.r.appspot.com/battleship/battleship.html?userid=" + userId + "'";
 
     //?userid=" + userId + "'"; 
     

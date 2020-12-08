@@ -110,17 +110,19 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
-  const [users, setUsers] = useState("");
+  const [userName, setUserName] = useState("Guest");
   const [sent, setSent] = useState(false);
   // const CHATSERVER = "http://localhost:8081";
-  const CHATSERVER = "https://backend-dot-second-folio-294223.nn.r.appspot.com";
+  const CHATSERVER = "https://backend-chat-dot-second-folio-294223.nn.r.appspot.com";
   const { user, isLoading, isAuthenticated } = useAuth0();
 
-  let userName;
+  // let userName;
 
-  if (!isLoading && isAuthenticated) {
-    userName = user.nickname;
-  }
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      setUserName(user.nickname);
+    }
+  }, []);
 
   useEffect(() => {
     // const { name, room } = queryString.parse(window.location.search);
@@ -163,6 +165,7 @@ const Chat = () => {
     const messageObject = {
       body: message,
       id: userId,
+      username: userName
     };
 
     if (message) {
@@ -185,7 +188,7 @@ const Chat = () => {
               return (
                 <MyRow key={index}>
                   <MyMessage>
-                    {userName}: {message.text.body}
+                    {message.text.username}: {message.text.body}
                   </MyMessage>
                 </MyRow>
               )
@@ -193,7 +196,7 @@ const Chat = () => {
               return (
                 <PartnerRow key={index}>
                   <PartnerMessage>
-                    {userName}: {message.text.body}
+                    {message.text.username}: {message.text.body}
                   </PartnerMessage>
                 </PartnerRow>
               )

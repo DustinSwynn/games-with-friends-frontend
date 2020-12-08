@@ -123,37 +123,43 @@ const FriendsList = () => {
     <div css={styles.userId}>Your User Id: {user.sub}</div>
   )
 
+  if (isLoading) {
+    return <div>Loading ...</div>
+  }
+
   return (
-    <div css={styles.wrapper}>
-      <h2>Friends</h2>
-      {currentUserId}
-      <form css={styles.form}>
-        <InputLabel>Add a friend</InputLabel>
-        <InputBase color="primary" placeholder="Friend ID" onChange={e => setFriendId(e.target.value)} />
-        <IconButton type="submit" onClick={handleOnSubmit}>
-          <AddCircleOutline />
-        </IconButton>
-      </form>
-      <div>
-        <TableContainer component={Paper}>
-          <Table className={styles.table} size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Friend</TableCell>
-                <TableCell align="right" style={{ "padding-right": "32px" }}>Codenames</TableCell>
-                <TableCell align="right" style={{ "padding-right": "24px" }}>Battleship</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {friendListItems
-                ? friendListItems
-                : noFriends
-              }
-            </TableBody>
-          </Table>
-        </TableContainer>
+    isAuthenticated && (
+      <div css={styles.wrapper}>
+        <h2>Friends</h2>
+        {currentUserId}
+        <form css={styles.form}>
+          <InputLabel>Add a friend</InputLabel>
+          <InputBase color="primary" placeholder="Friend ID" onChange={e => setFriendId(e.target.value)} />
+          <IconButton type="submit" onClick={handleOnSubmit}>
+            <AddCircleOutline />
+          </IconButton>
+        </form>
+        <div>
+          <TableContainer component={Paper}>
+            <Table className={styles.table} size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Friend</TableCell>
+                  <TableCell align="right" style={{ "padding-right": "32px" }}>Codenames</TableCell>
+                  <TableCell align="right" style={{ "padding-right": "24px" }}>Battleship</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {friendListItems
+                  ? friendListItems
+                  : noFriends
+                }
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
-    </div>
+    )
   )
 };
 

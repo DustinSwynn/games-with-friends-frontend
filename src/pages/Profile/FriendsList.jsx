@@ -46,14 +46,14 @@ const useStyles = () => ({
 
 const FriendsList = () => {
 
-  const { user } = useAuth0();
+  const { user, isLoading, isAuthenticated } = useAuth0();
   const userId = user.sub;
   const styles = useStyles();
 
   const [friendId, setFriendId] = useState();
   const [submitClicked, setSubmitClicked] = useState(false);
   const [nicknames, setNicknames] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const handleOnSubmit = () => {
     setSubmitClicked(true);
@@ -66,26 +66,28 @@ const FriendsList = () => {
   }, [submitClicked]);
 
   useEffect(() => {
-    getUser(userId)
-    .then(res => {
-      setNicknames([]);
-      let friends = res.data.friend;
-      friends.map(friendId => {
-        getUser(friendId)
-          .then(res => {
-            setNicknames(nicknames => [...nicknames, res.data.nickname])
-            setIsLoading(false);
-          })
+    if (!isLoading && isAuthenticated) {
+      getUser(userId)
+      .then(res => {
+        setNicknames([]);
+        let friends = res.data.friend;
+        friends.map(friendId => {
+          getUser(friendId)
+            .then(res => {
+              setNicknames(nicknames => [...nicknames, res.data.nickname])
+              setLoading(false);
+            })
+        })
       })
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }, []);
+      .catch(err => {
+        console.log(err);
+      })
+    }
+  }, [isLoading, isAuthenticated]);
 
   let friendListItems;
 
-  if (!isLoading && nicknames) {
+  if (!loading && nicknames && !isLoading && isAuthenticated) {
     friendListItems = (
       nicknames.map((nickname, i) => {
         return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Header = styled.div`
   margin-bottom: 30px;
@@ -113,7 +114,13 @@ const Chat = () => {
   const [sent, setSent] = useState(false);
   // const CHATSERVER = "http://localhost:8081";
   const CHATSERVER = "https://backend-dot-second-folio-294223.nn.r.appspot.com";
+  const { user, isLoading, isAuthenticated } = useAuth0();
 
+  let userName;
+
+  if (!isLoading && isAuthenticated) {
+    userName = user.nickname;
+  }
 
   useEffect(() => {
     // const { name, room } = queryString.parse(window.location.search);
@@ -178,7 +185,7 @@ const Chat = () => {
               return (
                 <MyRow key={index}>
                   <MyMessage>
-                    {message.text.id}: {message.text.body}
+                    {userName}: {message.text.body}
                   </MyMessage>
                 </MyRow>
               )
@@ -186,7 +193,7 @@ const Chat = () => {
               return (
                 <PartnerRow key={index}>
                   <PartnerMessage>
-                    {message.text.id}: {message.text.body}
+                    {userName}: {message.text.body}
                   </PartnerMessage>
                 </PartnerRow>
               )
